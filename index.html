@@ -132,6 +132,17 @@ table.tbl tbody th{width:7.5rem;color:var(--sub);font-weight:700;white-space:now
 .entry .part{font-size:.75rem;font-weight:800;letter-spacing:.14em;color:var(--sub)}
 .entry .title{font-size:1.05rem;font-weight:900}
 .entry .desc{font-size:.88rem;color:var(--sub)}
+.mini-preview{display:block;width:100%;height:7.3rem;margin:.35rem 0 .65rem;padding:.75rem;border-radius:1rem;background:#ECECEA;
+  box-shadow:inset 4px 4px 9px rgba(0,0,0,.12),inset -4px -4px 9px rgba(255,255,255,.9);overflow:hidden}
+.mini-window{height:100%;border-radius:.75rem;background:#FFFFFF;padding:.55rem;display:flex;flex-direction:column;gap:.4rem;
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.95),inset 0 -3px 5px rgba(0,0,0,.07),0 6px 12px rgba(0,0,0,.13)}
+.mini-top{display:flex;align-items:center;gap:.25rem}.mini-dot{width:.42rem;height:.42rem;border-radius:50%;background:#111111}.mini-title{width:42%;height:.42rem;border-radius:99px;background:#111111;margin-left:.2rem}
+.mini-stage{flex:1;border-radius:.55rem;background:#111111;padding:.55rem;display:flex;flex-direction:column;justify-content:center;gap:.35rem}
+.mini-stage::before{content:'';width:58%;height:.55rem;border-radius:99px;background:#FFFFFF}.mini-stage::after{content:'';width:78%;height:.35rem;border-radius:99px;background:#777777}
+.mini-controls{display:flex;gap:.3rem}.mini-controls span{height:.48rem;flex:1;border-radius:99px;background:#D6D6D2}.mini-controls span:first-child{background:var(--accent)}
+.mini-admin{display:grid;grid-template-columns:.7fr 1.3fr;gap:.4rem;flex:1}.mini-side,.mini-panel{border-radius:.55rem;background:#F1F1EF;box-shadow:inset 0 2px 2px rgba(255,255,255,.9),inset 0 -2px 4px rgba(0,0,0,.08)}
+.mini-side{display:flex;flex-direction:column;gap:.3rem;padding:.45rem}.mini-side span{height:.4rem;border-radius:99px;background:#BDBDB8}.mini-side span:first-child{background:#111111}
+.mini-panel{padding:.5rem;display:grid;grid-template-columns:repeat(2,1fr);gap:.35rem}.mini-panel span{border-radius:.4rem;background:#FFFFFF;box-shadow:0 3px 7px rgba(0,0,0,.1)}.mini-panel span:first-child{background:var(--accent)}
 
 /* 프롬프트 목록 */
 .phead{display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem}
@@ -250,8 +261,8 @@ footer nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 .3
       <h2 id="enterTitle">슬라이드 입장</h2>
       <p>학생용 화면과 관리자용 제어판</p>
       <div class="entry-grid">
-        <a class="entry" href="./slides.html"><span class="part">학생용</span><span class="title">강의 슬라이드</span><span class="desc">← → 이동 · G 전체보기 · P PDF 저장</span></a>
-        <a class="entry" href="./admin.html"><span class="part">관리자용</span><span class="title">강의 운영 제어판</span><span class="desc">슬라이드 진행 · 청중 잠금 · 자료 정책</span></a>
+        <a class="entry" href="./slides.html"><span class="part">학생용</span><span class="mini-preview" aria-hidden="true"><span class="mini-window"><span class="mini-top"><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-title"></span></span><span class="mini-stage"></span><span class="mini-controls"><span></span><span></span><span></span></span></span></span><span class="title">강의 슬라이드</span><span class="desc">← → 이동 · G 전체보기 · P PDF 저장</span></a>
+        <a class="entry" href="./admin.html"><span class="part">관리자용</span><span class="mini-preview" aria-hidden="true"><span class="mini-window"><span class="mini-top"><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-title"></span></span><span class="mini-admin"><span class="mini-side"><span></span><span></span><span></span><span></span></span><span class="mini-panel"><span></span><span></span><span></span><span></span></span></span></span></span><span class="title">강의 운영 제어판</span><span class="desc">슬라이드 진행 · 청중 잠금 · 자료 정책</span></a>
       </div>
     </div>
   </section>
