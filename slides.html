@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>노트북LM 마스터하기 슬라이드</title>
 <meta name="description" content="내 자료로 만드는 AI 학습 도우미 · 60분 실습 수업">
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#EAF4FF">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -198,6 +198,39 @@ audio{width:min(58cqi,100%);height:48px}
 .login-box button{font:inherit;font-weight:800;min-height:44px;padding:0 16px;border-radius:8px;border:1px solid #AAAAAA;background:#FFFFFF;cursor:pointer}
 .login-box button.primary{background:#111111;color:#FFFFFF;border-color:#111111}
 .login-box .err{color:#B71C1C;font-size:13px;font-weight:700;min-height:1.2em}
+
+/* 참고 이미지 기반 파스텔 클레이 색상 체계 */
+:root{
+  --ink:#24344B;--sub:#60718D;--mute:#7D89A0;--line:rgba(86,99,142,.16);
+  --slide-bg:#F5F7FF;--card:#FFFFFF;--accent:#DCD2FF;--accent-sub:#52617A;
+  --shadow:0 .45cqi 1.4cqi rgba(91,83,139,.11),inset 0 .12cqi .22cqi rgba(255,255,255,.9);
+  --shadow-lg:0 .8cqi 2.4cqi rgba(91,83,139,.15),inset 0 .16cqi .28cqi rgba(255,255,255,.92)
+}
+body{background:linear-gradient(135deg,#DDF4ED,#E8F3FF 42%,#E8DFFF 74%,#FFE2D2)}
+#stage{box-shadow:0 1.4cqi 4cqi rgba(71,67,111,.2)}
+.slide{background:linear-gradient(135deg,#F8FCFF,#F5F2FF 58%,#FFF7F1)}
+.title-slide{background:linear-gradient(125deg,#DDF4ED,#E8F3FF 40%,#E8DFFF 73%,#FFE2D2);color:var(--ink)}
+.title-slide .kicker{color:var(--ink)}
+.title-slide h1::after{background:#8173AC}
+.title-slide .lede{color:var(--sub)}
+.meta-row span{border-color:rgba(70,82,120,.28);color:var(--ink);background:rgba(255,255,255,.5);box-shadow:inset 0 .12cqi .22cqi rgba(255,255,255,.9),0 .35cqi 1cqi rgba(101,92,148,.1)}
+.slide.dark{background:linear-gradient(135deg,#675D92,#8173AC);color:#FFFFFF}
+.slide.dark .lede{color:#EEEAFE}
+.bullets li:nth-child(4n+1),.card-grid .card:nth-child(4n+1){background:#EAF8F3}
+.bullets li:nth-child(4n+2),.card-grid .card:nth-child(4n+2){background:#EAF4FF}
+.bullets li:nth-child(4n+3),.card-grid .card:nth-child(4n+3){background:#F0EBFF}
+.bullets li:nth-child(4n),.card-grid .card:nth-child(4n){background:#FFF0E8}
+.card.bad{background:#F5F2F8;border-color:#AA9FC2}.card.good{border-left-color:#62A992}
+table.tbl th{background:#6E63A0}table.tbl tr.today td:first-child{box-shadow:inset .55cqi 0 0 #62A992}
+.prompt-card{background:#51486F;color:#F7F5FF}.prompt-card .label{color:#DCD2FF}.prompt-card blockquote{border-left-color:#BFE8D8}
+.copy-btn{background:#DDF4ED;color:var(--ink)}.copy-btn:hover,.copy-btn.copied{background:#BFE8D8}
+.timer-chip.running{background:#6E63A0}.action-btn{background:#6E63A0}.action-btn.light{background:#FFE2D2;color:var(--ink)!important}
+.feature-copy p:nth-child(4n+1){background:#EAF8F3}.feature-copy p:nth-child(4n+2){background:#EAF4FF}.feature-copy p:nth-child(4n+3){background:#F0EBFF}.feature-copy p:nth-child(4n){background:#FFF0E8}
+.checkline{background:#EAF8F3;border-left-color:#62A992}
+#nav{background:#443D60;border-top-color:#635985;color:#F8F7FF}#nav button,#nav a{background:#5B5277;color:#FFF;border-color:#73698F}#nav button:hover,#nav a:hover{background:#71669A}
+#modeBadge,.conn{border-color:#8177A0;color:#EEEAFE}#modeBadge.follow,#nav button[aria-pressed="true"]{background:#DDF4ED;color:var(--ink);border-color:#DDF4ED}
+.hint{color:#CFC9E2}#progress{background:#BFE8D8}.fb-banner{background:#BFE8D8;color:var(--ink)}
+.login{background:rgba(68,61,96,.76)}.login-box{background:linear-gradient(145deg,#F8FCFF,#F4F0FF)}.login-box button.primary{background:#6E63A0;border-color:#6E63A0}
 
 /* PDF: 16:9 페이지 1장 = 슬라이드 1장 */
 @page{size:13.333in 7.5in;margin:0}

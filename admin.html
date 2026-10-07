@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>관리자 제어판 · 노트북LM 마스터하기</title>
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#EAF4FF">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
@@ -22,6 +22,19 @@
 #status{position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);background:var(--ink);color:var(--bg);border-radius:99px;padding:.5rem 1.1rem;font-size:.88rem;font-weight:900;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}#status.show{opacity:1}
 #gate{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:1.2rem}#gate form{background:var(--paper);box-shadow:var(--shadow);border-radius:var(--clay-radius);padding:1.7rem;width:min(22rem,100%);display:flex;flex-direction:column;gap:.8rem}#gate h1{font-size:1.2rem}#gate label{font-size:.9rem;font-weight:800}#gate input{min-height:44px;border:0;border-radius:.8rem;padding:0 .75rem;background:var(--soft);box-shadow:inset 3px 3px 7px rgba(0,0,0,.1),inset -3px -3px 7px rgba(255,255,255,.55)}#gateErr{color:var(--alert);font-size:.86rem;font-weight:800;min-height:1.3em}
 @media(max-width:760px){.grid,.fields,.metrics{grid-template-columns:1fr}.wide{grid-column:auto}.list-item{flex-direction:column}.list-item .row,.list-item .btn{width:100%}}
+/* 참고 이미지 기반 파스텔 클레이 색상 체계 */
+:root{--bg:#F4F6FF;--paper:#FFF;--ink:#24344B;--sub:#60718D;--soft:#EEF1FA;--line:rgba(86,99,142,.16);--accent:#BFE8D8;--alert:#B24F5B;--shadow:inset 0 2px 2px rgba(255,255,255,.92),inset 0 -3px 5px rgba(93,85,139,.06),8px 10px 24px rgba(91,83,139,.13),-5px -5px 15px rgba(255,255,255,.75)}
+@media(prefers-color-scheme:dark){:root{--bg:#F4F6FF;--paper:#FFF;--ink:#24344B;--sub:#60718D;--soft:#EEF1FA;--line:rgba(86,99,142,.16);--accent:#BFE8D8;--alert:#B24F5B;--shadow:inset 0 2px 2px rgba(255,255,255,.92),inset 0 -3px 5px rgba(93,85,139,.06),8px 10px 24px rgba(91,83,139,.13),-5px -5px 15px rgba(255,255,255,.75)}}
+body{background:radial-gradient(circle at 6% 8%,rgba(191,232,216,.72),transparent 27%),radial-gradient(circle at 91% 13%,rgba(220,210,255,.72),transparent 30%),radial-gradient(circle at 82% 88%,rgba(255,226,210,.62),transparent 28%),linear-gradient(135deg,#F7FCFF,#F5F2FF)}
+.top{background:rgba(255,255,255,.55);border-radius:1.25rem;padding:.85rem 1rem;box-shadow:var(--shadow)}
+.demo{background:#FFE2D2;color:var(--ink)}
+.card:nth-child(4n+1){background:#F3FBF8}.card:nth-child(4n+2){background:#F2F8FF}.card:nth-child(4n+3){background:#F6F2FF}.card:nth-child(4n){background:#FFF5EF}
+.btn{background:#62578D;color:#FFF}.btn.ghost{background:#DCD2FF;color:var(--ink)}.btn.danger{background:#FFE2D9;color:#9A4050}
+.field input,.field select,.field textarea{background:rgba(255,255,255,.72);box-shadow:inset 3px 3px 7px rgba(91,83,139,.09),inset -3px -3px 7px rgba(255,255,255,.8)}
+.pill{background:#EAF4FF}.pill.live{background:#BFE8D8;color:var(--ink)}
+.metric:nth-child(1){background:#DDF4ED}.metric:nth-child(2){background:#E8F3FF}.metric:nth-child(3){background:#EEE8FF}
+.jump button[aria-current="true"]{background:#6E63A0;color:#FFF}.switch[aria-checked="true"]{background:#6E63A0}.policy{background:#FFF0E8}
+#gate{background:linear-gradient(125deg,#DDF4ED,#E8F3FF 42%,#E8DFFF 73%,#FFE2D2)}#gate form{background:linear-gradient(145deg,#F8FCFF,#F4F0FF)}
 @media(prefers-reduced-motion:reduce){.switch::after,#status{transition:none}}
 </style>
 </head>
