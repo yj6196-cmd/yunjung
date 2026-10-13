@@ -26,6 +26,8 @@ export function createSync(cfg, deckId) {
   const auth = getAuth(app);
   const base = 'decks/' + deckId;
   const stateRef = ref(db, base + '/state');
+  let serverOffset = 0;
+  onValue(ref(db, '.info/serverTimeOffset'), s => { serverOffset = Number(s.val()) || 0; });
 
   let isAdmin = false;
   let user = null;
@@ -64,6 +66,8 @@ export function createSync(cfg, deckId) {
     setLock(on) { return patch({ locked: !!on }); },
     setPdf(on) { return patch({ pdf: !!on }); },
     setFocus(on) { return patch({ focus: !!on }); },
+    setTimer(timer) { return patch({ timer: {minutes:timer.minutes,remaining:timer.remaining,running:!!timer.running,endAt:timer.endAt || 0} }); },
+    now() { return Date.now() + serverOffset; },
     reset() { return patch({ ...DEFAULT_STATE }); },
 
     /* 접속자 수: 창을 닫거나 연결이 끊기면 서버가 자동으로 지움 */

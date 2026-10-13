@@ -553,7 +553,7 @@ table.tbl th{background:#6E63A0}table.tbl tr.today td:first-child{box-shadow:ins
 
     function currentRemaining(){
       if (!running) return remaining;
-      return Math.round((endAt - Date.now()) / 1000);
+      return Math.round((endAt - (window.NOTEBOOKLM_TIMER_NOW ? window.NOTEBOOKLM_TIMER_NOW() : Date.now())) / 1000);
     }
     function format(sec){
       var neg = sec < 0, abs = Math.abs(sec);
@@ -587,6 +587,29 @@ table.tbl th{background:#6E63A0}table.tbl tr.today td:first-child{box-shadow:ins
       remaining = totalSec;
       el.classList.remove('running');
       render();
+    }
+    if (el.classList.contains('break-big')) {
+      window.NOTEBOOKLM_BREAK_TIMER = {
+        apply: function(timer) {
+          if (!timer || !Number.isFinite(timer.minutes) || !Number.isFinite(timer.remaining)) return;
+          clearInterval(tickId);
+          totalSec = timer.minutes * 60;
+          remaining = timer.remaining;
+          endAt = timer.endAt;
+          running = timer.running === true && Number.isFinite(endAt);
+          el.dataset.minutes = timer.minutes;
+          el.setAttribute('aria-label', '휴식 타이머 ' + timer.minutes + '분');
+          el.classList.toggle('running', running);
+          if (running) tickId = setInterval(render, 250);
+          render();
+        },
+        value: function(){ return {minutes:totalSec/60,remaining:currentRemaining(),endAt:endAt,running:running}; }
+      };
+      el.addEventListener('click', function(){window.dispatchEvent(new CustomEvent('notebooklm-timer-action',{detail:'toggle'}));});
+      el.addEventListener('dblclick', function(e){e.stopPropagation();window.dispatchEvent(new CustomEvent('notebooklm-timer-action',{detail:'reset'}));});
+      el.addEventListener('keydown', function(e){if(['r','R','ㄱ'].includes(e.key)){e.preventDefault();window.dispatchEvent(new CustomEvent('notebooklm-timer-action',{detail:'reset'}));}});
+      render();
+      return;
     }
     el.addEventListener('click', function(){ if (running) pause(); else start(); });
     el.addEventListener('dblclick', function(e){ e.stopPropagation(); reset(); });
@@ -726,6 +749,23 @@ let isAdmin = false;
 let online = false;
 let viewers = null;
 let latestState = null;
+window.NOTEBOOKLM_TIMER_NOW = () => sync ? sync.now() : Date.now();
+function applyTimer(timer) { if (timer) window.NOTEBOOKLM_BREAK_TIMER.apply(timer); }
+function readLocalTimer() {
+  try { const saved=JSON.parse(localStorage.getItem('notebooklm0930_admin') || 'null'); applyTimer(saved && saved.practice); } catch (_) {}
+}
+window.addEventListener('storage', (event) => { if (!sync && event.key === 'notebooklm0930_admin') readLocalTimer(); });
+window.addEventListener('notebooklm-timer-action', (event) => {
+  if (!(isAdmin || localAdmin)) return;
+  const timer=window.NOTEBOOKLM_BREAK_TIMER.value();
+  if (event.detail === 'reset') { timer.remaining=timer.minutes*60;timer.running=false;timer.endAt=null; }
+  else if (timer.running) { timer.running=false;timer.endAt=null; }
+  else { timer.running=true;timer.endAt=window.NOTEBOOKLM_TIMER_NOW()+timer.remaining*1000; }
+  if (sync && isAdmin) sync.setTimer(timer).catch(() => showStatus('타이머 저장 실패 · 규칙 확인'));
+  else {
+    try { const saved=JSON.parse(localStorage.getItem('notebooklm0930_admin') || '{}');saved.practice={...saved.practice,...timer};localStorage.setItem('notebooklm0930_admin',JSON.stringify(saved));applyTimer(timer); } catch (_) { applyTimer(timer); }
+  }
+});
 
 function isConfigured(cfg) {
   return !!(cfg && typeof cfg.apiKey === 'string' && cfg.apiKey && !cfg.apiKey.includes('[') &&
@@ -782,6 +822,7 @@ deck.setNavigationGuard(() => !focusOn && (isAdmin || !stateSeen || !locked));
 
 if (!isConfigured(window.FIREBASE_CONFIG)) {
   localAdmin = WANT_ADMIN;
+  readLocalTimer();
   freeViewing('Firebase 설정 전 · 자유 열람 모드');
 } else {
   try {
@@ -796,6 +837,7 @@ if (!isConfigured(window.FIREBASE_CONFIG)) {
       locked = !!state.locked;
       applyPdf(state.pdf !== false);
       applyFocus(state.focus === true);
+      applyTimer(state.timer);
       if (!isAdmin && locked) deck.showRemote(state.slide | 0);
       renderMode();
     });

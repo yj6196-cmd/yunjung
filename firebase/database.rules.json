@@ -17,6 +17,14 @@
           "locked": { ".validate": "newData.isBoolean()" },
           "pdf": { ".validate": "newData.isBoolean()" },
           "focus": { ".validate": "newData.isBoolean()" },
+          "timer": {
+            ".validate": "newData.hasChildren(['minutes','remaining','running','endAt']) && (!newData.child('running').val() || newData.child('endAt').val() > 0)",
+            "minutes": { ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 180" },
+            "remaining": { ".validate": "newData.isNumber() && newData.val() >= -86400 && newData.val() <= 10800" },
+            "running": { ".validate": "newData.isBoolean()" },
+            "endAt": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+            "$other": { ".validate": false }
+          },
           "updatedAt": { ".validate": "newData.isNumber()" },
           "$other": { ".validate": false }
         },

@@ -1,0 +1,13 @@
+{
+  "localTabs": true,
+  "tenMinuteSelection": true,
+  "startPauseReset": true,
+  "reload": true,
+  "mockedFirebase": true,
+  "studentCannotControl": true,
+  "teacherControl": true,
+  "overflow": [],
+  "pdfPages": 22,
+  "errors": [],
+  "liveFirebase": "Configuration placeholders; not tested"
+}
