@@ -1,0 +1,28 @@
+{
+  "localAdminToggle": true,
+  "studentButtonHidden": true,
+  "escapeAndSlidePreservation": true,
+  "mobile": [
+    {
+      "width": 320,
+      "overflow": false,
+      "content": true
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "content": true
+    },
+    {
+      "width": 430,
+      "overflow": false,
+      "content": true
+    }
+  ],
+  "overflow": [],
+  "mockedSynchronization": true,
+  "studentCannotDismiss": true,
+  "lockAndPdfPreserved": true,
+  "pageErrors": [],
+  "realFirebase": "Not configured; live service not tested"
+}

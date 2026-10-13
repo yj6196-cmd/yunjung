@@ -16,6 +16,7 @@
           "slide": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 1000" },
           "locked": { ".validate": "newData.isBoolean()" },
           "pdf": { ".validate": "newData.isBoolean()" },
+          "focus": { ".validate": "newData.isBoolean()" },
           "updatedAt": { ".validate": "newData.isNumber()" },
           "$other": { ".validate": false }
         },

@@ -232,11 +232,19 @@ table.tbl th{background:#6E63A0}table.tbl tr.today td:first-child{box-shadow:ins
 .hint{color:#CFC9E2}#progress{background:#BFE8D8}.fb-banner{background:#BFE8D8;color:var(--ink)}
 .login{background:rgba(68,61,96,.76)}.login-box{background:linear-gradient(145deg,#F8FCFF,#F4F0FF)}.login-box button.primary{background:#6E63A0;border-color:#6E63A0}
 
+.focus-overlay{position:fixed;inset:0 0 var(--nav-h);z-index:550;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;padding:24px;overflow:hidden}
+.focus-overlay[hidden]{display:none}
+.focus-content{display:flex;flex-direction:column;align-items:center;gap:18px;width:100%;max-height:100%;text-align:center;animation:focus-enter .3s ease-out}
+.focus-content img{display:block;width:min(360px,65vw);height:min(48vh,420px);max-height:55%;object-fit:contain;flex-shrink:1;min-height:0}
+.focus-content p{color:#FFF;font-size:clamp(20px,3.2vw,38px);font-weight:800;line-height:1.5;max-width:100%;flex-shrink:0;text-wrap:balance}
+@keyframes focus-enter{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.focus-content{animation:none}}
+@media(max-width:760px){html:has(#nav.focus-admin){--nav-h:112px}#nav{gap:5px;padding:0 6px}#nav button,#nav a{padding:0 8px}#nav.focus-admin{flex-wrap:wrap;align-content:center;padding:6px}#nav.focus-admin #modeBadge,#nav.focus-admin .grow{display:none}.focus-overlay{padding:16px}}
 /* PDF: 16:9 페이지 1장 = 슬라이드 1장 */
 @page{size:13.333in 7.5in;margin:0}
 @media print{
   html, body{overflow:visible!important;height:auto!important;background:#FFFFFF}
-  #nav, #progress, .grid-overlay{display:none!important}
+  #nav, #progress, .grid-overlay, .focus-overlay{display:none!important}
   #stage{position:static!important;transform:none!important;width:13.333in!important;aspect-ratio:auto!important;overflow:visible!important}
   #stage > .slide{position:relative!important;display:flex!important;width:13.333in;height:7.5in;
     break-after:page;page-break-after:always;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -396,6 +404,10 @@ table.tbl th{background:#6E63A0}table.tbl tr.today td:first-child{box-shadow:ins
 </main>
 
 <div id="progress" aria-hidden="true"></div>
+<div id="focusOverlay" class="focus-overlay" role="dialog" aria-modal="true" aria-labelledby="focusMessage" hidden>
+  <div class="focus-content"><img src="./assets/pinky-shh.png" alt="손가락을 입 앞에 세운 핑키" width="512" height="640"><p id="focusMessage">쉿! 잠깐, 선생님 설명에 집중해 주세요.</p></div>
+</div>
+<audio id="focusAudio" src="./assets/focus-message.m4a" preload="auto" hidden></audio>
 <nav id="nav" aria-label="슬라이드 이동">
   <a href="index.html" target="_blank" rel="noopener" class="hide-sm" aria-label="강의 홈 새 창으로 열기">⌂ 홈</a>
   <button type="button" id="navPrev" aria-label="이전 슬라이드">◀</button>
@@ -407,6 +419,7 @@ table.tbl th{background:#6E63A0}table.tbl tr.today td:first-child{box-shadow:ins
   <span class="hint hide-sm">← → 이동 · G 전체보기 · P PDF</span>
   <button type="button" id="lockBtn" hidden aria-pressed="false">🔓 자유 이동</button>
   <button type="button" id="pdfBtn" hidden aria-pressed="true">PDF 허용 중</button>
+  <button type="button" id="focusBtn" hidden aria-pressed="false" aria-controls="focusOverlay">🤫 집중</button>
   <button type="button" id="gridBtn" aria-haspopup="dialog" aria-controls="gridOverlay">▦ 전체 보기</button>
   <button type="button" id="printBtn" class="hide-sm">⎙ PDF 저장</button>
 </nav>
@@ -670,6 +683,40 @@ const login = document.getElementById('login');
 const loginForm = document.getElementById('loginForm');
 const loginError = document.getElementById('lgErr');
 const hint = document.querySelector('#nav .hint');
+const focusBtn = document.getElementById('focusBtn');
+const focusOverlay = document.getElementById('focusOverlay');
+const focusAudio = document.getElementById('focusAudio');
+let focusOn = false;
+let localAdmin = false;
+
+function applyFocus(on) {
+  const changed = focusOn !== !!on;
+  focusOn = !!on;
+  focusOverlay.hidden = !focusOn;
+  focusBtn.setAttribute('aria-pressed', String(focusOn));
+  focusBtn.textContent = focusOn ? '🤫 집중 해제' : '🤫 집중';
+  document.getElementById('stage').inert = focusOn;
+  document.getElementById('navPrev').disabled = focusOn;
+  document.getElementById('navNext').disabled = focusOn;
+  if (changed && focusOn && (isAdmin || localAdmin)) {
+    focusAudio.currentTime = 0;
+    focusAudio.play().catch(() => showStatus('음성 재생 제한 · 집중 버튼 다시 선택'));
+  } else if (!focusOn) {
+    focusAudio.pause();
+    focusAudio.currentTime = 0;
+  }
+}
+function requestFocus(on) {
+  if (sync && isAdmin) sync.setFocus(on).catch(() => showStatus('집중 저장 실패 · 규칙과 권한 확인'));
+  else if (localAdmin) applyFocus(on);
+}
+focusBtn.addEventListener('click', () => requestFocus(!focusOn));
+document.addEventListener('keydown', (event) => {
+  if (!focusOn) return;
+  event.stopImmediatePropagation();
+  if (event.key === 'Escape' && (isAdmin || localAdmin)) { event.preventDefault(); requestFocus(false); }
+  else if (!['Tab', 'Enter', ' '].includes(event.key)) event.preventDefault();
+}, true);
 
 let sync = null;
 let stateSeen = false;
@@ -702,11 +749,14 @@ function renderMode() {
   modeBadge.classList.toggle('follow', following);
   lockBtn.hidden = !isAdmin;
   pdfBtn.hidden = !isAdmin;
+  focusBtn.hidden = !(isAdmin || localAdmin);
+  document.getElementById('nav').classList.toggle('focus-admin', isAdmin || localAdmin);
   lockBtn.textContent = locked ? '🔒 잠금 중' : '🔓 자유 이동';
   lockBtn.setAttribute('aria-pressed', String(locked));
   pdfBtn.textContent = pdfOk ? 'PDF 허용 중' : 'PDF 막힘';
   pdfBtn.setAttribute('aria-pressed', String(pdfOk));
   deck.refreshNav();
+  applyFocus(focusOn);
 }
 function renderConnection() {
   if (!sync) { connBadge.hidden = true; return; }
@@ -728,9 +778,10 @@ function freeViewing(message) {
   renderMode();
 }
 
-deck.setNavigationGuard(() => isAdmin || !stateSeen || !locked);
+deck.setNavigationGuard(() => !focusOn && (isAdmin || !stateSeen || !locked));
 
 if (!isConfigured(window.FIREBASE_CONFIG)) {
+  localAdmin = WANT_ADMIN;
   freeViewing('Firebase 설정 전 · 자유 열람 모드');
 } else {
   try {
@@ -744,6 +795,7 @@ if (!isConfigured(window.FIREBASE_CONFIG)) {
       stateSeen = true;
       locked = !!state.locked;
       applyPdf(state.pdf !== false);
+      applyFocus(state.focus === true);
       if (!isAdmin && locked) deck.showRemote(state.slide | 0);
       renderMode();
     });
